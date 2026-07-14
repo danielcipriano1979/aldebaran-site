@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vizinhos Rust Brasil 5X — 10 Times, 1 Sobrevive</title>
+<style>
+  :root {
+    --bg: #16130f;
+    --panel: #201c16;
+    --panel2: #2a251d;
+    --border: #3a332a;
+    --text: #e8e2d5;
+    --muted: #a89f8d;
+    --accent: #ce422b;
+    --gold: #ffd700;
+    --green: #7da33c;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  a { color: var(--gold); }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+  header {
+    background: linear-gradient(180deg, #241d14 0%, var(--bg) 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 48px 0 32px;
+    text-align: center;
+  }
+  header h1 { font-size: 2.2rem; letter-spacing: 1px; text-transform: uppercase; }
+  header h1 span { color: var(--accent); }
+  header p.tagline { color: var(--gold); font-size: 1.15rem; margin-top: 6px; font-weight: 600; }
+  .connect {
+    display: inline-block; margin-top: 18px;
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 6px;
+    padding: 10px 18px; font-family: Consolas, monospace; font-size: 1.05rem;
+  }
+  .connect b { color: var(--green); }
+
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: #1b1712ee; border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(4px);
+  }
+  nav .wrap { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+  nav a {
+    color: var(--text); text-decoration: none; padding: 12px 16px;
+    font-weight: 600; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  nav a:hover { color: var(--gold); }
+
+  section { padding: 44px 0; border-bottom: 1px solid var(--border); }
+  section h2 {
+    font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px;
+    color: var(--gold); margin-bottom: 18px;
+  }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px 24px; margin-bottom: 14px;
+  }
+  .card h3 { color: var(--accent); margin-bottom: 8px; font-size: 1.1rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  ul { padding-left: 20px; }
+  li { margin: 4px 0; }
+  .muted { color: var(--muted); font-size: 0.92rem; }
+
+  .btn {
+    display: inline-block; background: var(--accent); color: #fff; text-decoration: none;
+    padding: 12px 26px; border-radius: 6px; font-weight: 700; font-size: 1rem;
+    border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .btn:hover { filter: brightness(1.15); }
+  .btn.gold { background: #8a6d00; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+  td.pos { color: var(--gold); font-weight: 700; width: 44px; }
+  td.score { color: var(--gold); font-weight: 700; text-align: right; }
+  tr:nth-child(1) td.pos { font-size: 1.1rem; }
+
+  footer { padding: 28px 0; text-align: center; color: var(--muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Vizinhos <span>Rust</span> Brasil 5X</h1>
+    <p class="tagline">10 TIMES, 1 SOBREVIVE — MODO COMPETIÇÃO</p>
+    <div class="connect">connect <b>SEU_IP_AQUI:28015</b></div>
+  </div>
+</header>
+
+<nav>
+  <div class="wrap">
+    <a href="#como-funciona">Como Funciona</a>
+    <a href="#eventos">Eventos</a>
+    <a href="#scoreboard">Scoreboard</a>
+    <a href="#mapa">Mapa</a>
+    <a href="#vip">VIP</a>
+    <a href="#admin">Admin</a>
+  </div>
+</nav>
+
+<section id="como-funciona">
+  <div class="wrap">
+    <h2>⚔️ Como Funciona</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>1. Monte seu time (ou jogue solo)</h3>
+        <p>Times de até <b>3 jogadores</b>. São 10 ilhas no mapa, uma para cada time, com garagem, ziplines e acesso ao metrô. Solos também disputam!</p>
+      </div>
+      <div class="card">
+        <h3>2. Colete TAGS</h3>
+        <p>Cada jogador morto em PvP dropa uma <b style="color:var(--gold)">TAG</b> no corpo. Tags também aparecem nas caixas do airdrop, nos eventos e na queda do avião.</p>
+      </div>
+      <div class="card">
+        <h3>3. Deposite no altar</h3>
+        <p>Leve as tags até o <b>altar da sua ilha</b> e aperte o botão <b>DEPOSITAR</b>. Tag no inventário pode ser roubada se você morrer — só vale ponto depois de depositada!</p>
+      </div>
+      <div class="card">
+        <h3>4. Vença o wipe</h3>
+        <p>O ranking (<code>/top</code> no jogo ou nesta página) mostra os líderes. <b>Quem tiver mais tags depositadas no fim do wipe VENCE.</b></p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <h3>Regras do servidor 5X</h3>
+      <ul>
+        <li>Gather 5x, stacks 5x (armas não stackam)</li>
+        <li>Nasce com kit inicial, vida e fome cheias — barril quebra com 1 hit e loot vai pro inventário</li>
+        <li><code>/home</code> (1 home), <code>/remove</code>, <code>/up 1-4</code>, <code>/mymini</code> (minicopter)</li>
+        <li>Menu do TC: repare, faça upgrade e troque as skins da base inteira em um clique</li>
+        <li><b>Combat/Raid block:</b> em combate ou raid não dá para teleportar, usar kit ou remover</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="eventos">
+  <div class="wrap">
+    <h2>🎯 Eventos</h2>
+    <div class="grid">
+      <div class="card">
+        <h3>✈️ Airdrop em Massa (a cada 1h)</h3>
+        <p>20 caixas de alto valor: HQM, armas, C4, foguetes, tags e 5% de chance da granada que constrói uma base inteira.</p>
+      </div>
+      <div class="card">
+        <h3>💥 Queda de Avião (1x por dia)</h3>
+        <p>Um avião cai no mapa com o melhor loot do servidor + tags. Local marcado no mapa — dispute a queda!</p>
+      </div>
+      <div class="card">
+        <h3>🔵 Zona de Controle</h3>
+        <p>Um círculo azul aparece no mapa. Fique dentro para ganhar tags por minuto. Quem dominar mais tempo é o Rei da Zona.</p>
+      </div>
+      <div class="card">
+        <h3>🟣 Caixa Misteriosa</h3>
+        <p>Hackable crate com loot de elite e 5–10 tags. Hack de 5 minutos: defenda ou roube.</p>
+      </div>
+      <div class="card">
+        <h3>🚁 Helicóptero da Competição</h3>
+        <p>Quem derrubar o heli leva o loot e 10 tags de bônus.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="scoreboard">
+  <div class="wrap">
+    <h2>🏆 Scoreboard</h2>
+    <p class="muted" id="sb-updated">Carregando...</p>
+    <div class="grid" style="margin-top:14px">
+      <div class="card">
+        <h3>Top Players</h3>
+        <table id="sb-players"><thead><tr><th>#</th><th>Player</th><th style="text-align:right">Tags</th></tr></thead><tbody></tbody></table>
+      </div>
+      <div class="card">
+        <h3>Top Times / Clãs</h3>
+        <table id="sb-teams"><thead><tr><th>#</th><th>Time</th><th style="text-align:right">Tags</th></tr></thead><tbody></tbody></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mapa">
+  <div class="wrap">
+    <h2>🗺️ Mapa</h2>
+    <div class="card">
+      <p>Mapa custom <b>Survivor — 10 Teams 1 Survive</b> (3500): 10 ilhas de times com altar de tags, garagem e ziplines, metrô subterrâneo com 15 entradas e monumentos clássicos (Launch, Train Yard, Airfield, Power Plant...).</p>
+      <p class="muted" style="margin: 10px 0">O jogo baixa o mapa automaticamente ao conectar. Se quiser baixar manualmente:</p>
+      <a class="btn" href="https://github.com/danielcipriano1979/aldebaran-rust-maps/releases/download/v1/Survivor10Teams1Survive.map">⬇ Baixar o mapa (.map, 16 MB)</a>
+    </div>
+  </div>
+</section>
+
+<section id="vip">
+  <div class="wrap">
+    <h2>⭐ VIP</h2>
+    <div class="card">
+      <h3>Benefícios</h3>
+      <ul>
+        <li><b>/kit vip</b> (a cada 6h) + kits <b>Home</b>, <b>Componentes</b> e <b>PVP</b> (1x por wipe)</li>
+        <li><b>/bgrade</b> — construa direto em pedra/metal</li>
+        <li><b>/skin</b> — skins em qualquer item</li>
+        <li><b>5 homes</b> e teleporte sem limite diário</li>
+        <li><b>/remove sem cooldown</b></li>
+        <li>Minicopter com <b>combustível infinito</b></li>
+        <li><b>Recicladora própria</b> para colocar na base</li>
+      </ul>
+      <p style="margin-top:14px">
+        <a class="btn gold" href="COLE_AQUI_SEU_LINK_DE_PAGAMENTO">💎 Comprar VIP — R$ XX,XX</a>
+      </p>
+      <p class="muted" style="margin-top:10px">Após o pagamento, envie o comprovante com seu nick no Discord: <b>COLE_AQUI_SEU_DISCORD</b></p>
+    </div>
+  </div>
+</section>
+
+<section id="admin">
+  <div class="wrap">
+    <h2>🔧 Admin</h2>
+    <div class="card">
+      <p>Painel de administração via RCON no navegador (apenas staff):</p>
+      <p style="margin:12px 0"><a class="btn" href="https://facepunch.github.io/webrcon/" target="_blank">Abrir WebRCON</a></p>
+      <p class="muted">Conecte com o IP do servidor, porta <b>28017</b> e a senha RCON. A senha nunca fica nesta página.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Vizinhos Rust Brasil — servidor comunitário. Rust é marca da Facepunch Studios.
+  </div>
+</footer>
+
+<script>
+(function () {
+  function fill(tableId, list) {
+    var tbody = document.querySelector(tableId + ' tbody');
+    tbody.innerHTML = '';
+    if (!list || list.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" class="muted">Ninguém pontuou ainda — seja o primeiro!</td></tr>';
+      return;
+    }
+    list.slice(0, 10).forEach(function (entry, i) {
+      var medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td class="pos">' + medal + '</td><td>' + escapeHtml(entry.Name) + '</td><td class="score">' + entry.Score + '</td>';
+      tbody.appendChild(tr);
+    });
+  }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  fetch('data/scoreboard.json?_=' + Date.now())
+    .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+    .then(function (data) {
+      document.getElementById('sb-updated').textContent = 'Atualizado em: ' + (data.UpdatedAt || '—');
+      fill('#sb-players', data.Players);
+      fill('#sb-teams', data.Teams);
+    })
+    .catch(function () {
+      document.getElementById('sb-updated').textContent = 'Scoreboard ainda não publicado.';
+      fill('#sb-players', []);
+      fill('#sb-teams', []);
+    });
+})();
+</script>
+
+</body>
+</html>
