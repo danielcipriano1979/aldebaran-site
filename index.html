@@ -29,14 +29,19 @@
   header {
     background: linear-gradient(180deg, #241d14 0%, var(--bg) 100%);
     border-bottom: 2px solid var(--accent);
-    padding: 48px 0 32px;
+    padding: 44px 0 30px;
     text-align: center;
   }
   header h1 { font-size: 2.2rem; letter-spacing: 1px; text-transform: uppercase; }
   header h1 span { color: var(--accent); }
   header p.tagline { color: var(--gold); font-size: 1.15rem; margin-top: 6px; font-weight: 600; }
+  .season-pill {
+    display: inline-block; margin-top: 14px;
+    background: var(--panel2); border: 1px solid var(--gold); border-radius: 999px;
+    padding: 8px 22px; font-size: 1rem; color: var(--gold); font-weight: 600;
+  }
   .connect {
-    display: inline-block; margin-top: 18px;
+    display: block; width: fit-content; margin: 14px auto 0;
     background: var(--panel2); border: 1px solid var(--border); border-radius: 6px;
     padding: 10px 18px; font-family: Consolas, monospace; font-size: 1.05rem;
   }
@@ -47,10 +52,10 @@
     background: #1b1712ee; border-bottom: 1px solid var(--border);
     backdrop-filter: blur(4px);
   }
-  nav .wrap { display: flex; gap: 4px; flex-wrap: wrap; justify-content: center; }
+  nav .wrap { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; }
   nav a {
-    color: var(--text); text-decoration: none; padding: 12px 16px;
-    font-weight: 600; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--text); text-decoration: none; padding: 12px 13px;
+    font-weight: 600; font-size: 0.92rem; text-transform: uppercase; letter-spacing: 0.5px;
   }
   nav a:hover { color: var(--gold); }
 
@@ -63,8 +68,9 @@
     background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
     padding: 20px 24px; margin-bottom: 14px;
   }
-  .card h3 { color: var(--accent); margin-bottom: 8px; font-size: 1.1rem; }
+  .card h3 { color: var(--accent); margin-bottom: 8px; font-size: 1.05rem; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
   ul { padding-left: 20px; }
   li { margin: 4px 0; }
   .muted { color: var(--muted); font-size: 0.92rem; }
@@ -78,11 +84,21 @@
   .btn.gold { background: #8a6d00; }
 
   table { width: 100%; border-collapse: collapse; }
-  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--border); }
-  th { color: var(--muted); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
-  td.pos { color: var(--gold); font-weight: 700; width: 44px; }
-  td.score { color: var(--gold); font-weight: 700; text-align: right; }
-  tr:nth-child(1) td.pos { font-size: 1.1rem; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+  th { color: var(--muted); text-transform: uppercase; font-size: 0.78rem; letter-spacing: 1px; }
+  td.pos { color: var(--gold); font-weight: 700; width: 40px; }
+  td.score { color: var(--gold); font-weight: 700; text-align: right; white-space: nowrap; }
+
+  .ach {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px;
+  }
+  .ach .nome { color: var(--gold); font-weight: 700; }
+  .ach .desc { font-size: 0.92rem; margin: 4px 0 8px; }
+  .ach .quem { font-size: 0.85rem; color: var(--muted); }
+  .ach .count {
+    float: right; background: var(--panel2); border: 1px solid var(--border);
+    border-radius: 999px; padding: 1px 10px; font-size: 0.8rem; color: var(--green);
+  }
 
   footer { padding: 28px 0; text-align: center; color: var(--muted); font-size: 0.85rem; }
 </style>
@@ -93,6 +109,7 @@
   <div class="wrap">
     <h1>Vizinhos <span>Rust</span> Brasil 5X</h1>
     <p class="tagline">10 TIMES, 1 SOBREVIVE — MODO COMPETIÇÃO</p>
+    <div class="season-pill" id="season-pill">Temporada em andamento</div>
     <div class="connect">connect <b>SEU_IP_AQUI:28015</b></div>
   </div>
 </header>
@@ -102,6 +119,8 @@
     <a href="#como-funciona">Como Funciona</a>
     <a href="#eventos">Eventos</a>
     <a href="#scoreboard">Scoreboard</a>
+    <a href="#stats">Estatísticas</a>
+    <a href="#achievements">Achievements</a>
     <a href="#mapa">Mapa</a>
     <a href="#vip">VIP</a>
     <a href="#admin">Admin</a>
@@ -114,30 +133,34 @@
     <div class="grid">
       <div class="card">
         <h3>1. Monte seu time (ou jogue solo)</h3>
-        <p>Times de até <b>3 jogadores</b>. São 10 ilhas no mapa, uma para cada time, com garagem, ziplines e acesso ao metrô. Solos também disputam!</p>
+        <p>Times/clãs de até <b>3 jogadores</b>. São 10 ilhas no mapa, uma para cada time, com garagem, ziplines e acesso ao metrô. Solos também disputam!</p>
       </div>
       <div class="card">
         <h3>2. Colete TAGS</h3>
-        <p>Cada jogador morto em PvP dropa uma <b style="color:var(--gold)">TAG</b> no corpo. Tags também aparecem nas caixas do airdrop, nos eventos e na queda do avião.</p>
+        <p>Cada jogador morto em PvP dropa uma <b style="color:var(--gold)">TAG</b> no corpo. Tags também aparecem no airdrop, nos eventos, na queda do avião e nos bots que protegem a carga.</p>
       </div>
       <div class="card">
         <h3>3. Deposite no altar</h3>
-        <p>Leve as tags até o <b>altar da sua ilha</b> e aperte o botão <b>DEPOSITAR</b>. Tag no inventário pode ser roubada se você morrer — só vale ponto depois de depositada!</p>
+        <p>Leve as tags até o <b>altar da sua ilha</b> e aperte o <b>botão de depositar</b>. Tag no inventário pode ser roubada se você morrer — só vale ponto depois de depositada!</p>
       </div>
       <div class="card">
-        <h3>4. Vença o wipe</h3>
-        <p>O ranking (<code>/top</code> no jogo ou nesta página) mostra os líderes. <b>Quem tiver mais tags depositadas no fim do wipe VENCE.</b></p>
+        <h3>4. Vença a temporada</h3>
+        <p>A temporada dura <b>3 meses</b> e atravessa os wipes — as tags depositadas acumulam. No fim, <b>quem tiver mais tags é o CAMPEÃO</b> da temporada.</p>
       </div>
-    </div>
-    <div class="card" style="margin-top:14px">
-      <h3>Regras do servidor 5X</h3>
-      <ul>
-        <li>Gather 5x, stacks 5x (armas não stackam)</li>
-        <li>Nasce com kit inicial, vida e fome cheias — barril quebra com 1 hit e loot vai pro inventário</li>
-        <li><code>/home</code> (1 home), <code>/remove</code>, <code>/up 1-4</code>, <code>/mymini</code> (minicopter)</li>
-        <li>Menu do TC: repare, faça upgrade e troque as skins da base inteira em um clique</li>
-        <li><b>Combat/Raid block:</b> em combate ou raid não dá para teleportar, usar kit ou remover</li>
-      </ul>
+      <div class="card">
+        <h3>🛡️ WipeBlock de 12 horas</h3>
+        <p>Nas primeiras <b>12 horas de cada wipe</b>, explosivos não danificam bases: todo mundo tem tempo justo de farmar e construir. Depois disso, <b>raid liberado</b> — o servidor anuncia a hora exata.</p>
+      </div>
+      <div class="card">
+        <h3>Regras do servidor 5X</h3>
+        <ul>
+          <li>Gather 5x, stacks 5x (armas não stackam)</li>
+          <li>Kit inicial, barril 1-hit com loot direto no inventário</li>
+          <li><code>/home</code>, <code>/remove</code>, <code>/up 1-4</code>, <code>/mymini</code></li>
+          <li>Menu do TC: reparo, upgrade e skins da base em um clique</li>
+          <li>Combat/Raid block: sem teleporte, kit ou remove durante a briga</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -151,12 +174,12 @@
         <p>20 caixas de alto valor: HQM, armas, C4, foguetes, tags e 5% de chance da granada que constrói uma base inteira.</p>
       </div>
       <div class="card">
-        <h3>💥 Queda de Avião (1x por dia)</h3>
-        <p>Um avião cai no mapa com o melhor loot do servidor + tags. Local marcado no mapa — dispute a queda!</p>
+        <h3>💥 Queda de Avião (todo dia às 10h)</h3>
+        <p>Um avião cai com o melhor loot do servidor + tags — mas <b>bots cientistas protegem a carga</b> (e também dropam tags).</p>
       </div>
       <div class="card">
         <h3>🔵 Zona de Controle</h3>
-        <p>Um círculo azul aparece no mapa. Fique dentro para ganhar tags por minuto. Quem dominar mais tempo é o Rei da Zona.</p>
+        <p>Círculo azul no mapa: fique dentro para ganhar tags por minuto. Quem dominar mais tempo é o Rei da Zona.</p>
       </div>
       <div class="card">
         <h3>🟣 Caixa Misteriosa</h3>
@@ -184,6 +207,22 @@
         <table id="sb-teams"><thead><tr><th>#</th><th>Time</th><th style="text-align:right">Tags</th></tr></thead><tbody></tbody></table>
       </div>
     </div>
+  </div>
+</section>
+
+<section id="stats">
+  <div class="wrap">
+    <h2>📊 Estatísticas da Temporada</h2>
+    <p class="muted" id="st-updated">Carregando...</p>
+    <div class="grid3" id="st-categories" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<section id="achievements">
+  <div class="wrap">
+    <h2>🎖️ Achievements</h2>
+    <p class="muted">Desbloqueie jogando — o servidor anuncia cada conquista no chat.</p>
+    <div class="grid3" id="ach-grid" style="margin-top:14px"></div>
   </div>
 </section>
 
@@ -239,7 +278,15 @@
 
 <script>
 (function () {
-  function fill(tableId, list) {
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function fmt(n) {
+    return typeof n === 'number' ? n.toLocaleString('pt-BR') : n;
+  }
+  function fillRank(tableId, list) {
     var tbody = document.querySelector(tableId + ' tbody');
     tbody.innerHTML = '';
     if (!list || list.length === 0) {
@@ -249,26 +296,76 @@
     list.slice(0, 10).forEach(function (entry, i) {
       var medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
       var tr = document.createElement('tr');
-      tr.innerHTML = '<td class="pos">' + medal + '</td><td>' + escapeHtml(entry.Name) + '</td><td class="score">' + entry.Score + '</td>';
+      tr.innerHTML = '<td class="pos">' + medal + '</td><td>' + escapeHtml(entry.Name) + '</td><td class="score">' + fmt(entry.Score) + '</td>';
       tbody.appendChild(tr);
     });
   }
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-    });
-  }
+
+  // scoreboard + temporada
   fetch('data/scoreboard.json?_=' + Date.now())
     .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
     .then(function (data) {
       document.getElementById('sb-updated').textContent = 'Atualizado em: ' + (data.UpdatedAt || '—');
-      fill('#sb-players', data.Players);
-      fill('#sb-teams', data.Teams);
+      fillRank('#sb-players', data.Players);
+      fillRank('#sb-teams', data.Teams);
+
+      var pill = document.getElementById('season-pill');
+      var name = data.SeasonName || 'Temporada';
+      if (data.SeasonEndsAt) {
+        var end = new Date(data.SeasonEndsAt + 'T23:59:59');
+        var days = Math.ceil((end - new Date()) / 86400000);
+        if (days > 0) {
+          pill.textContent = '🏁 ' + name + ' — termina em ' + days + ' dia' + (days > 1 ? 's' : '');
+        } else {
+          var champ = data.Players && data.Players.length ? data.Players[0].Name : '—';
+          pill.textContent = '👑 ' + name + ' ENCERRADA — Campeão: ' + champ;
+        }
+      } else {
+        pill.textContent = '🏁 ' + name + ' em andamento';
+      }
     })
     .catch(function () {
       document.getElementById('sb-updated').textContent = 'Scoreboard ainda não publicado.';
-      fill('#sb-players', []);
-      fill('#sb-teams', []);
+      fillRank('#sb-players', []);
+      fillRank('#sb-teams', []);
+    });
+
+  // estatisticas + achievements
+  fetch('data/stats.json?_=' + Date.now())
+    .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+    .then(function (data) {
+      document.getElementById('st-updated').textContent = 'Atualizado em: ' + (data.UpdatedAt || '—');
+
+      var grid = document.getElementById('st-categories');
+      grid.innerHTML = '';
+      (data.Categories || []).forEach(function (cat) {
+        var rows = (cat.Top || []).slice(0, 5).map(function (e, i) {
+          return '<tr><td class="pos">' + (i + 1) + '</td><td>' + escapeHtml(e.Name) + '</td><td class="score">' + fmt(e.Value) + '</td></tr>';
+        }).join('');
+        if (!rows) rows = '<tr><td colspan="3" class="muted">Sem dados ainda</td></tr>';
+        var div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = '<h3>' + escapeHtml(cat.Titulo) + '</h3><table><tbody>' + rows + '</tbody></table>';
+        grid.appendChild(div);
+      });
+
+      var ach = document.getElementById('ach-grid');
+      ach.innerHTML = '';
+      (data.Achievements || []).forEach(function (a) {
+        var players = a.Players || [];
+        var quem = players.length === 0 ? 'Ninguém desbloqueou ainda'
+          : players.slice(0, 4).map(escapeHtml).join(', ') + (players.length > 4 ? ' +' + (players.length - 4) : '');
+        var div = document.createElement('div');
+        div.className = 'ach';
+        div.innerHTML = '<span class="count">' + players.length + '×</span>' +
+          '<div class="nome">' + escapeHtml(a.Nome) + '</div>' +
+          '<div class="desc">' + escapeHtml(a.Descricao) + '</div>' +
+          '<div class="quem">' + quem + '</div>';
+        ach.appendChild(div);
+      });
+    })
+    .catch(function () {
+      document.getElementById('st-updated').textContent = 'Estatísticas ainda não publicadas.';
     });
 })();
 </script>

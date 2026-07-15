@@ -1,30 +1,39 @@
-# Copia o scoreboard exportado pelo plugin AldebaranTags para o site e publica no GitHub Pages.
-# Agende no Task Scheduler do Windows (ex.: a cada 5 minutos) na maquina do servidor.
+# Copia o scoreboard e as estatisticas exportados pelos plugins para o site e publica no GitHub Pages.
+# Agende no Task Scheduler do Windows (ex.: a cada 5 minutos) NA MAQUINA DO SERVIDOR:
+#   schtasks /Create /SC MINUTE /MO 5 /TN "AldebaranScoreboard" /TR "powershell -ExecutionPolicy Bypass -File C:\Aldebaran\RustServer\site\publish-scoreboard.ps1"
 #
-# Requisitos: gh CLI autenticado (gh auth login) e o repo do site clonado localmente.
+# Requisitos na maquina: git + gh CLI autenticado (gh auth login) e este diretorio sendo o clone do repo aldebaran-site.
 
 param(
-    # data file gerado pelo plugin no servidor
-    [string]$Source = "C:\Aldebaran\RustServer\server\carbon\data\AldebaranTagsScoreboard.json",
-    # clone local do repositorio do site
-    [string]$SiteRepo = "C:\Aldebaran\RustServer\site"
+    [string]$DataDir = "C:\Aldebaran\RustServer\server\carbon\data",
+    [string]$SiteRepo = $PSScriptRoot
 )
 
-if (-not (Test-Path $Source)) {
-    Write-Host "Scoreboard ainda nao exportado pelo plugin: $Source"
+$pairs = @(
+    @{ Source = Join-Path $DataDir "AldebaranTagsScoreboard.json"; Target = "data\scoreboard.json" },
+    @{ Source = Join-Path $DataDir "AldebaranStatsExport.json";    Target = "data\stats.json" }
+)
+
+$copied = $false
+foreach ($pair in $pairs) {
+    if (Test-Path $pair.Source) {
+        Copy-Item $pair.Source (Join-Path $SiteRepo $pair.Target) -Force
+        $copied = $true
+    }
+}
+
+if (-not $copied) {
+    Write-Host "Nenhum export encontrado ainda em $DataDir"
     exit 0
 }
 
-$target = Join-Path $SiteRepo "data\scoreboard.json"
-Copy-Item $Source $target -Force
-
 Set-Location $SiteRepo
-git add data/scoreboard.json
-$changed = git status --porcelain data/scoreboard.json
+git add data/scoreboard.json data/stats.json 2>$null
+$changed = git status --porcelain data
 if ($changed) {
-    git commit -m "scoreboard update" | Out-Null
+    git commit -m "atualiza scoreboard/stats" | Out-Null
     git push
-    Write-Host "Scoreboard publicado."
+    Write-Host "Scoreboard e stats publicados."
 } else {
-    Write-Host "Sem mudancas no scoreboard."
+    Write-Host "Sem mudancas."
 }
