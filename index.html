@@ -6,17 +6,21 @@
 <title>Vizinhos Rust Brasil — Servidor Competitivo</title>
 <style>
   :root {
-    --bg: #16130f;
-    --panel: #201c16;
-    --panel2: #2a251d;
-    --border: #3a332a;
-    --text: #e8e2d5;
+    --bg: #0d0b09;
+    --bg2: #16130f;
+    --panel: #1d1914;
+    --panel2: #262119;
+    --border: #38312a;
+    --text: #ece6d9;
     --muted: #a89f8d;
     --accent: #ce422b;
+    --accent2: #ff6a3d;
     --gold: #ffd700;
     --green: #7da33c;
+    --amber: #ffb020;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
     background: var(--bg);
     color: var(--text);
@@ -24,51 +28,102 @@
     line-height: 1.6;
   }
   a { color: var(--gold); }
-  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
 
-  header {
-    background: linear-gradient(180deg, #241d14 0%, var(--bg) 100%);
-    border-bottom: 2px solid var(--accent);
-    padding: 44px 0 30px;
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 480px;
+    display: flex; align-items: center; justify-content: center;
     text-align: center;
+    overflow: hidden;
+    background: linear-gradient(180deg, #2b1b12 0%, #4a2317 35%, #1a120c 78%, var(--bg) 100%);
+    border-bottom: 2px solid var(--accent);
   }
-  header h1 { font-size: 2.2rem; letter-spacing: 1px; text-transform: uppercase; }
-  header h1 span { color: var(--accent); }
-  header p.tagline { color: var(--gold); font-size: 1.15rem; margin-top: 6px; font-weight: 600; }
-  .season-pill {
-    display: inline-block; margin-top: 14px;
-    background: var(--panel2); border: 1px solid var(--gold); border-radius: 999px;
-    padding: 8px 22px; font-size: 1rem; color: var(--gold); font-weight: 600;
+  .hero-art { position: absolute; inset: 0; pointer-events: none; }
+  .hero-art svg { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; }
+  .sun {
+    position: absolute; top: 12%; left: 50%; transform: translateX(-50%);
+    width: 190px; height: 190px; border-radius: 50%;
+    background: radial-gradient(circle, #ffce6b 0%, #ff8f4d 45%, transparent 70%);
+    opacity: 0.85; filter: blur(2px);
+    animation: pulse 6s ease-in-out infinite;
   }
-  .connect {
-    display: block; width: fit-content; margin: 14px auto 0;
-    background: var(--panel2); border: 1px solid var(--border); border-radius: 6px;
-    padding: 10px 18px; font-family: Consolas, monospace; font-size: 1.05rem;
+  @keyframes pulse { 0%,100% { opacity: 0.75; } 50% { opacity: 0.95; } }
+  .heli {
+    position: absolute; top: 18%; left: -12%;
+    font-size: 2rem; opacity: 0.85;
+    animation: fly 38s linear infinite;
   }
-  .connect b { color: var(--green); }
+  .plane {
+    position: absolute; top: 9%; left: -10%;
+    font-size: 1.6rem; opacity: 0.75;
+    animation: fly 55s linear infinite 12s;
+  }
+  @keyframes fly { from { transform: translateX(0); } to { transform: translateX(130vw); } }
 
+  .hero-inner { position: relative; z-index: 2; padding: 72px 20px 60px; }
+  .hero h1 {
+    font-size: clamp(2.1rem, 6vw, 3.4rem);
+    text-transform: uppercase; letter-spacing: 3px; font-weight: 900;
+    text-shadow: 0 4px 24px rgba(0,0,0,0.6);
+  }
+  .hero h1 span { color: var(--accent2); }
+  .hero .tagline {
+    margin-top: 6px; font-size: clamp(1rem, 2.6vw, 1.3rem);
+    color: var(--gold); font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .badges { margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    padding: 8px 20px; border-radius: 999px; font-weight: 700; font-size: 0.92rem;
+    border: 1px solid var(--border); background: rgba(0,0,0,0.45);
+  }
+  .badge.test {
+    color: #1a1206; background: var(--amber); border-color: var(--amber);
+    animation: blink 2.4s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100% { box-shadow: 0 0 0 rgba(255,176,32,0); } 50% { box-shadow: 0 0 22px rgba(255,176,32,0.65); } }
+  .badge.season { color: var(--gold); border-color: var(--gold); }
+  .connect {
+    display: inline-block; margin-top: 22px;
+    background: rgba(0,0,0,0.55); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px 22px; font-family: Consolas, monospace; font-size: 1.08rem;
+    cursor: pointer; transition: border-color 0.2s;
+  }
+  .connect:hover { border-color: var(--accent2); }
+  .connect b { color: var(--green); }
+  .connect small { display: block; color: var(--muted); font-size: 0.72rem; font-family: inherit; }
+  .cta-row { margin-top: 18px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  /* ===== NAV ===== */
   nav {
-    position: sticky; top: 0; z-index: 10;
-    background: #1b1712ee; border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(4px);
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(18,14,11,0.94); border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(6px);
   }
   nav .wrap { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; }
   nav a {
-    color: var(--text); text-decoration: none; padding: 12px 13px;
-    font-weight: 600; font-size: 0.92rem; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--text); text-decoration: none; padding: 13px 12px;
+    font-weight: 600; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;
+    border-bottom: 2px solid transparent; transition: color 0.15s, border-color 0.15s;
   }
-  nav a:hover { color: var(--gold); }
+  nav a:hover { color: var(--accent2); border-bottom-color: var(--accent2); }
 
-  section { padding: 44px 0; border-bottom: 1px solid var(--border); }
+  /* ===== SECTIONS ===== */
+  section { padding: 52px 0; border-bottom: 1px solid var(--border); }
+  section:nth-of-type(even) { background: var(--bg2); }
   section h2 {
-    font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px;
-    color: var(--gold); margin-bottom: 18px;
+    font-size: 1.6rem; text-transform: uppercase; letter-spacing: 2px;
+    margin-bottom: 22px; display: flex; align-items: center; gap: 12px;
   }
+  section h2::before { content: ""; width: 6px; height: 28px; background: var(--accent); border-radius: 3px; }
   .card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
     padding: 20px 24px; margin-bottom: 14px;
+    transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
   }
-  .card h3 { color: var(--accent); margin-bottom: 8px; font-size: 1.05rem; }
+  .card:hover { transform: translateY(-2px); border-color: #4d443a; box-shadow: 0 8px 24px rgba(0,0,0,0.35); }
+  .card h3 { color: var(--accent2); margin-bottom: 8px; font-size: 1.05rem; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
   .grid3 { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
   ul { padding-left: 20px; }
@@ -77,11 +132,13 @@
 
   .btn {
     display: inline-block; background: var(--accent); color: #fff; text-decoration: none;
-    padding: 12px 26px; border-radius: 6px; font-weight: 700; font-size: 1rem;
+    padding: 12px 26px; border-radius: 8px; font-weight: 700; font-size: 1rem;
     border: none; cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px;
+    transition: filter 0.15s, transform 0.1s;
   }
-  .btn:hover { filter: brightness(1.15); }
+  .btn:hover { filter: brightness(1.18); transform: translateY(-1px); }
   .btn.gold { background: #8a6d00; }
+  .btn.ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
 
   table { width: 100%; border-collapse: collapse; }
   th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
@@ -89,9 +146,7 @@
   td.pos { color: var(--gold); font-weight: 700; width: 40px; }
   td.score { color: var(--gold); font-weight: 700; text-align: right; white-space: nowrap; }
 
-  .ach {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px;
-  }
+  .ach { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
   .ach .nome { color: var(--gold); font-weight: 700; }
   .ach .desc { font-size: 0.92rem; margin: 4px 0 8px; }
   .ach .quem { font-size: 0.85rem; color: var(--muted); }
@@ -100,17 +155,68 @@
     border-radius: 999px; padding: 1px 10px; font-size: 0.8rem; color: var(--green);
   }
 
-  footer { padding: 28px 0; text-align: center; color: var(--muted); font-size: 0.85rem; }
+  /* ===== PERFIL ===== */
+  .perfil-search { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+  .perfil-search input {
+    flex: 1; min-width: 220px;
+    background: var(--panel2); color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px; font-size: 1rem;
+  }
+  .perfil-search input:focus { outline: none; border-color: var(--accent2); }
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 14px; }
+  .stat {
+    background: var(--panel2); border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px; text-align: center;
+  }
+  .stat .v { font-size: 1.45rem; font-weight: 800; color: var(--gold); }
+  .stat .l { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+  .mini-ach { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .mini-ach span {
+    padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; border: 1px solid var(--border);
+    background: var(--panel2); color: var(--muted);
+  }
+  .mini-ach span.on { background: #3a2f00; border-color: var(--gold); color: var(--gold); }
+  .steam-link { margin-top: 12px; display: inline-block; }
+
+  footer { padding: 30px 0; text-align: center; color: var(--muted); font-size: 0.85rem; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="wrap">
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="hero-art">
+    <div class="sun"></div>
+    <div class="plane">✈️</div>
+    <div class="heli">🚁</div>
+    <svg viewBox="0 0 1440 320" preserveAspectRatio="xMidYMax slice">
+      <path fill="#241a10" opacity="0.9" d="M0,240 C120,200 200,250 330,235 C460,220 520,180 640,205 C760,230 830,190 960,215 C1090,240 1180,200 1300,225 C1370,238 1410,230 1440,235 L1440,320 L0,320 Z"></path>
+      <path fill="#161009" d="M0,275 C160,250 280,285 430,270 C580,255 700,290 860,272 C1020,254 1160,288 1310,270 C1370,263 1420,268 1440,270 L1440,320 L0,320 Z"></path>
+      <!-- ilhas -->
+      <ellipse cx="180" cy="300" rx="95" ry="16" fill="#1e150c"></ellipse>
+      <ellipse cx="720" cy="305" rx="120" ry="18" fill="#1e150c"></ellipse>
+      <ellipse cx="1260" cy="300" rx="95" ry="16" fill="#1e150c"></ellipse>
+      <!-- torres FOB -->
+      <rect x="700" y="258" width="12" height="46" fill="#0e0a06"></rect>
+      <rect x="694" y="252" width="24" height="8" fill="#0e0a06"></rect>
+      <rect x="170" y="268" width="9" height="36" fill="#0e0a06"></rect>
+      <rect x="1252" y="268" width="9" height="36" fill="#0e0a06"></rect>
+    </svg>
+  </div>
+  <div class="hero-inner">
     <h1>Vizinhos <span>Rust</span> Brasil</h1>
-    <p class="tagline">SERVIDOR COMPETITIVO — 10 TIMES, 1 SOBREVIVE</p>
-    <div class="season-pill" id="season-pill">Temporada em andamento</div>
-    <div class="connect">connect <b>play.vizinhos-rust.com.br:28015</b></div>
+    <p class="tagline">Servidor Competitivo — 10 Times, 1 Sobrevive</p>
+    <div class="badges">
+      <span class="badge test" id="season-pill">🚧 FASE DE TESTES — a temporada ainda NÃO começou</span>
+    </div>
+    <div class="connect" onclick="copyConnect()" title="Clique para copiar">
+      connect <b>play.vizinhos-rust.com.br:28015</b>
+      <small id="copy-hint">clique para copiar e cole no console F1 do Rust</small>
+    </div>
+    <div class="cta-row">
+      <a class="btn" href="#como-funciona">Como Funciona</a>
+      <a class="btn ghost" href="https://discord.gg/YV8TuBsM8U" target="_blank">💬 Entrar no Discord</a>
+    </div>
   </div>
 </header>
 
@@ -120,14 +226,15 @@
     <a href="#eventos">Eventos</a>
     <a href="#scoreboard">Scoreboard</a>
     <a href="#stats">Estatísticas</a>
+    <a href="#perfil">Meu Perfil</a>
     <a href="#achievements">Achievements</a>
     <a href="#mapa">Mapa</a>
     <a href="#vip">VIP</a>
     <a href="#admin">Admin</a>
-    <a href="https://discord.gg/YV8TuBsM8U" target="_blank">💬 Discord</a>
   </div>
 </nav>
 
+<!-- ===== COMO FUNCIONA ===== -->
 <section id="como-funciona">
   <div class="wrap">
     <h2>⚔️ Como Funciona</h2>
@@ -138,45 +245,54 @@
       </div>
       <div class="card">
         <h3>2. Colete TAGS</h3>
-        <p>Cada jogador morto em PvP dropa uma <b style="color:var(--gold)">TAG</b> no corpo. Tags também aparecem no airdrop, nos eventos, na queda do avião e nos bots que protegem a carga.</p>
+        <p>Cada jogador morto em PvP dropa uma <b style="color:var(--gold)">TAG</b> no corpo. Tags também aparecem no airdrop, nos eventos, nos bots do avião — e <b>destruir o TC inimigo vale 100 tags</b>!</p>
       </div>
       <div class="card">
         <h3>3. Deposite no altar</h3>
-        <p>Leve as tags até o <b>altar da sua ilha</b> e aperte o <b>botão de depositar</b>. Tag no inventário pode ser roubada se você morrer — só vale ponto depois de depositada!</p>
+        <p>Leve as tags ao <b>altar da sua ilha</b>, coloque na caixinha e aperte <b>Submit</b>. Tag no inventário pode ser roubada se você morrer — só vale ponto depois de depositada!</p>
       </div>
       <div class="card">
         <h3>4. Vença a temporada</h3>
-        <p>A temporada dura <b>3 meses</b> e atravessa os wipes — as tags depositadas acumulam. No fim, <b>quem tiver mais tags é o CAMPEÃO</b> da temporada.</p>
+        <p>A temporada dura <b>3 meses</b> e atravessa os wipes — as tags depositadas acumulam. No fim, <b>quem tiver mais tags é o CAMPEÃO</b>.</p>
+      </div>
+      <div class="card">
+        <h3>🏰 FOBs — bases avançadas</h3>
+        <p>Estruturas fixas espalhadas pelo mapa (círculos verdes). <b>Plante seu TC lá dentro para dominar</b>: só o dono coloca portas, baús, camas e torretas. A casca é indestrutível — o combate é pelas portas e pelo TC. Sleeping bag na FOB = respawn avançado!</p>
       </div>
       <div class="card">
         <h3>🛡️ WipeBlock de 12 horas</h3>
-        <p>Nas primeiras <b>12 horas de cada wipe</b>, explosivos não danificam bases: todo mundo tem tempo justo de farmar e construir. Depois disso, <b>raid liberado</b> — o servidor anuncia a hora exata.</p>
+        <p>Nas primeiras <b>12 horas de cada wipe</b>, nada danifica bases: C4, rocket, F1 e eco-raid bloqueados. Tempo justo de farmar e construir — o servidor anuncia a liberação.</p>
       </div>
       <div class="card">
         <h3>Regras do servidor</h3>
         <ul>
-          <li>Farm 1x (vanilla) — stacks 5x (armas não stackam)</li>
+          <li><b>Farm 1x</b> (vanilla) — stacks 5x (armas não stackam)</li>
+          <li>Construção <b>só na sua ilha e nas FOBs</b> — palha sem TC some em 5 min</li>
           <li>Kit inicial, barril 1-hit com loot direto no inventário</li>
-          <li>Fornalha rápida 5x para todos</li>
-          <li>Menu do TC: <b>reparo e skins</b> da base inteira em um clique</li>
-          <li>Combat/Raid block: sem teleporte, kit ou remove durante a briga</li>
+          <li>Fornalha rápida 5x e menu do TC (reparo e skins) para todos</li>
+          <li>Combat/Raid block: sem teleporte ou kit durante a briga</li>
         </ul>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ===== EVENTOS ===== -->
 <section id="eventos">
   <div class="wrap">
     <h2>🎯 Eventos</h2>
     <div class="grid">
       <div class="card">
         <h3>✈️ Airdrop em Massa (a cada 1h)</h3>
-        <p>10 caixas com armas básicas, roupas, mochilas, materiais de construção, <b>tags</b> e 5% de chance da granada que constrói uma base inteira. As armas top ficam nos eventos grandes!</p>
+        <p>10 caixas com armas básicas, roupas, <b>mochilas</b>, materiais de construção, <b>tags</b> e 5% de chance da granada que constrói uma base inteira.</p>
       </div>
       <div class="card">
-        <h3>💥 Queda de Avião (a cada 2 horas)</h3>
-        <p>Um avião cai com o melhor loot do servidor + tags — mas <b>bots cientistas protegem a carga</b> (e também dropam tags).</p>
+        <h3>💥 Queda de Avião (a cada 2h)</h3>
+        <p>O melhor loot do servidor + tags, protegido por <b>bots cientistas</b> (que também dropam tags). 20% de chance de granada de base por caixa!</p>
+      </div>
+      <div class="card">
+        <h3>🚁 Helicóptero CAÇADOR</h3>
+        <p>Vida reduzida, agressividade máxima: <b>ele caça todo mundo</b>, armado ou não. Quem derrubar leva o loot + 10 tags.</p>
       </div>
       <div class="card">
         <h3>🔵 Zona de Controle</h3>
@@ -187,13 +303,14 @@
         <p>Hackable crate com loot de elite e 5–10 tags. Hack de 5 minutos: defenda ou roube.</p>
       </div>
       <div class="card">
-        <h3>🚁 Helicóptero da Competição</h3>
-        <p>Quem derrubar o heli leva o loot e 10 tags de bônus.</p>
+        <h3>🛩️ Minicopters Selvagens</h3>
+        <p><b>4 minis</b> aparecem pelo mapa a cada 2 horas, <b>sem combustível</b> — ache primeiro, abasteça e domine os céus.</p>
       </div>
     </div>
   </div>
 </section>
 
+<!-- ===== SCOREBOARD ===== -->
 <section id="scoreboard">
   <div class="wrap">
     <h2>🏆 Scoreboard</h2>
@@ -211,14 +328,29 @@
   </div>
 </section>
 
+<!-- ===== ESTATISTICAS ===== -->
 <section id="stats">
   <div class="wrap">
-    <h2>📊 Estatísticas da Temporada</h2>
+    <h2>📊 Estatísticas</h2>
     <p class="muted" id="st-updated">Carregando...</p>
     <div class="grid3" id="st-categories" style="margin-top:14px"></div>
   </div>
 </section>
 
+<!-- ===== MEU PERFIL ===== -->
+<section id="perfil">
+  <div class="wrap">
+    <h2>🎮 Meu Perfil</h2>
+    <p class="muted">Digite o seu nick do jogo (ou SteamID64) para ver suas estatísticas e conquistas. Fica salvo neste navegador.</p>
+    <div class="perfil-search" style="margin-top:14px">
+      <input type="text" id="perfil-input" placeholder="Seu nick no servidor ou SteamID64" />
+      <button class="btn" onclick="searchProfile()">Buscar</button>
+    </div>
+    <div id="perfil-result"></div>
+  </div>
+</section>
+
+<!-- ===== ACHIEVEMENTS ===== -->
 <section id="achievements">
   <div class="wrap">
     <h2>🎖️ Achievements</h2>
@@ -227,17 +359,19 @@
   </div>
 </section>
 
+<!-- ===== MAPA ===== -->
 <section id="mapa">
   <div class="wrap">
     <h2>🗺️ Mapa</h2>
     <div class="card">
-      <p>Mapa custom <b>Survivor — 10 Teams 1 Survive</b> (3500): 10 ilhas de times com altar de tags, garagem e ziplines, metrô subterrâneo com 15 entradas e monumentos clássicos (Launch, Train Yard, Airfield, Power Plant...).</p>
+      <p>Mapa custom <b>Survivor — 10 Teams 1 Survive</b> (3500), editado exclusivamente para o servidor: 10 ilhas de times com altar de tags, <b>FOBs disputáveis</b>, garagens, ziplines, metrô subterrâneo com 15 entradas e monumentos clássicos.</p>
       <p class="muted" style="margin: 10px 0">O jogo baixa o mapa automaticamente ao conectar. Se quiser baixar manualmente:</p>
-      <a class="btn" href="https://github.com/danielcipriano1979/aldebaran-rust-maps/releases/download/v1/Survivor10Teams1Survive.map">⬇ Baixar o mapa (.map, 16 MB)</a>
+      <a class="btn" href="https://github.com/danielcipriano1979/aldebaran-rust-maps/releases/download/v3/Survivor10Teams1Survive.map">⬇ Baixar o mapa (.map, 16 MB)</a>
     </div>
   </div>
 </section>
 
+<!-- ===== VIP ===== -->
 <section id="vip">
   <div class="wrap">
     <h2>⭐ VIP</h2>
@@ -248,22 +382,23 @@
         <li><b>Upgrade da base inteira</b> — aba UPGRADE no menu do TC + <b>/up 1-4</b></li>
         <li><b>/home</b> — 5 homes e teleporte sem limite</li>
         <li><b>/mymini</b> — seu minicopter com combustível infinito</li>
+        <li><b>/remove</b> — sem cooldown</li>
         <li><b>/bgrade</b> — construa direto em pedra/metal</li>
         <li><b>/skin</b> — skins em qualquer item</li>
-        <li><b>/remove sem cooldown</b></li>
         <li><b>Recicladora própria</b> para colocar na base</li>
       </ul>
       <div class="card" style="background:var(--panel2); margin-top:14px">
-        <p>⚖️ <b>Fair play:</b> o VIP funciona apenas no <b>off-season</b>. Durante a temporada competitiva as vantagens ficam <b>automaticamente suspensas</b> para ninguém ter vantagem na disputa pelas tags — os dias de validade continuam contando normalmente pelo período contratado.</p>
+        <p>⚖️ <b>Fair play:</b> o VIP funciona apenas no <b>off-season</b>. Durante a temporada competitiva as vantagens ficam <b>automaticamente suspensas</b> para ninguém ter vantagem na disputa pelas tags — os dias de validade continuam contando normalmente.</p>
       </div>
       <p style="margin-top:14px">
         <a class="btn gold" href="COLE_AQUI_SEU_LINK_DE_PAGAMENTO">💎 Comprar VIP — R$ 49,90 / 30 dias</a>
       </p>
-      <p class="muted" style="margin-top:10px">Pagamento via Mercado Pago (PIX ou cartão). Após pagar, envie o comprovante com seu nick no Discord: <b><a href="https://discord.gg/YV8TuBsM8U">discord.gg/YV8TuBsM8U</a></b></p>
+      <p class="muted" style="margin-top:10px">Pagamento via Mercado Pago (PIX ou cartão). Após pagar, envie o comprovante com seu nick no Discord: <a href="https://discord.gg/YV8TuBsM8U">discord.gg/YV8TuBsM8U</a></p>
     </div>
   </div>
 </section>
 
+<!-- ===== ADMIN ===== -->
 <section id="admin">
   <div class="wrap">
     <h2>🔧 Admin</h2>
@@ -277,20 +412,28 @@
 
 <footer>
   <div class="wrap">
-    Vizinhos Rust Brasil — servidor comunitário. Rust é marca da Facepunch Studios.
+    Vizinhos Rust Brasil — servidor comunitário · <a href="https://discord.gg/YV8TuBsM8U">Discord</a> · Rust é marca da Facepunch Studios.
   </div>
 </footer>
 
 <script>
 (function () {
+  var statsData = null;
+  var scoreboardData = null;
+
   function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
     });
   }
-  function fmt(n) {
-    return typeof n === 'number' ? n.toLocaleString('pt-BR') : n;
-  }
+  function fmt(n) { return typeof n === 'number' ? n.toLocaleString('pt-BR') : n; }
+
+  window.copyConnect = function () {
+    var cmd = 'connect play.vizinhos-rust.com.br:28015';
+    if (navigator.clipboard) navigator.clipboard.writeText(cmd);
+    document.getElementById('copy-hint').textContent = '✔ copiado! cole no console F1 do Rust';
+  };
+
   function fillRank(tableId, list) {
     var tbody = document.querySelector(tableId + ' tbody');
     tbody.innerHTML = '';
@@ -306,28 +449,29 @@
     });
   }
 
-  // scoreboard + temporada
+  // scoreboard + temporada / fase de testes
   fetch('data/scoreboard.json?_=' + Date.now())
     .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
     .then(function (data) {
+      scoreboardData = data;
       document.getElementById('sb-updated').textContent = 'Atualizado em: ' + (data.UpdatedAt || '—');
       fillRank('#sb-players', data.Players);
       fillRank('#sb-teams', data.Teams);
 
       var pill = document.getElementById('season-pill');
-      var name = data.SeasonName || 'Temporada';
       if (data.SeasonEndsAt) {
         var end = new Date(data.SeasonEndsAt + 'T23:59:59');
         var days = Math.ceil((end - new Date()) / 86400000);
+        pill.classList.remove('test');
+        pill.classList.add('season');
         if (days > 0) {
-          pill.textContent = '🏁 ' + name + ' — termina em ' + days + ' dia' + (days > 1 ? 's' : '');
+          pill.textContent = '🏁 ' + (data.SeasonName || 'Temporada') + ' EM ANDAMENTO — termina em ' + days + ' dia' + (days > 1 ? 's' : '');
         } else {
           var champ = data.Players && data.Players.length ? data.Players[0].Name : '—';
-          pill.textContent = '👑 ' + name + ' ENCERRADA — Campeão: ' + champ;
+          pill.textContent = '👑 ' + (data.SeasonName || 'Temporada') + ' ENCERRADA — Campeão: ' + champ;
         }
-      } else {
-        pill.textContent = '🏁 ' + name + ' em andamento';
       }
+      // sem SeasonEndsAt: mantem o aviso de FASE DE TESTES
     })
     .catch(function () {
       document.getElementById('sb-updated').textContent = 'Scoreboard ainda não publicado.';
@@ -335,10 +479,11 @@
       fillRank('#sb-teams', []);
     });
 
-  // estatisticas + achievements
+  // estatisticas + achievements + perfil
   fetch('data/stats.json?_=' + Date.now())
     .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
     .then(function (data) {
+      statsData = data;
       document.getElementById('st-updated').textContent = 'Atualizado em: ' + (data.UpdatedAt || '—');
 
       var grid = document.getElementById('st-categories');
@@ -368,10 +513,70 @@
           '<div class="quem">' + quem + '</div>';
         ach.appendChild(div);
       });
+
+      // busca automatica do perfil salvo
+      var saved = localStorage.getItem('vzr_nick');
+      if (saved) {
+        document.getElementById('perfil-input').value = saved;
+        window.searchProfile();
+      }
     })
     .catch(function () {
       document.getElementById('st-updated').textContent = 'Estatísticas ainda não publicadas.';
     });
+
+  window.searchProfile = function () {
+    var query = document.getElementById('perfil-input').value.trim();
+    var result = document.getElementById('perfil-result');
+    if (!query) return;
+
+    if (!statsData || !statsData.AllPlayers || statsData.AllPlayers.length === 0) {
+      result.innerHTML = '<div class="card muted" style="margin-top:14px">Perfis ainda não publicados — jogue no servidor e volte em alguns minutos!</div>';
+      return;
+    }
+
+    var q = query.toLowerCase();
+    var player = statsData.AllPlayers.find(function (p) { return p.SteamId === query; }) ||
+                 statsData.AllPlayers.find(function (p) { return (p.Name || '').toLowerCase() === q; }) ||
+                 statsData.AllPlayers.find(function (p) { return (p.Name || '').toLowerCase().indexOf(q) !== -1; });
+
+    if (!player) {
+      result.innerHTML = '<div class="card muted" style="margin-top:14px">Jogador "' + escapeHtml(query) + '" não encontrado — o perfil aparece depois da primeira ação no servidor.</div>';
+      return;
+    }
+
+    localStorage.setItem('vzr_nick', query);
+
+    var tags = 0;
+    if (scoreboardData && scoreboardData.Players) {
+      var tagEntry = scoreboardData.Players.find(function (e) { return e.Name === player.Name; });
+      if (tagEntry) tags = tagEntry.Score;
+    }
+    var kd = player.Deaths > 0 ? (player.Kills / player.Deaths).toFixed(2) : player.Kills.toFixed(0);
+
+    var achHtml = (statsData.Achievements || []).map(function (a) {
+      var on = (player.Achievements || []).indexOf(a.Id) !== -1;
+      return '<span class="' + (on ? 'on' : '') + '" title="' + escapeHtml(a.Descricao) + '">' + (on ? '🏅 ' : '🔒 ') + escapeHtml(a.Nome) + '</span>';
+    }).join('');
+
+    result.innerHTML =
+      '<div class="card" style="margin-top:14px">' +
+      '<h3 style="font-size:1.3rem">' + escapeHtml(player.Name) + '</h3>' +
+      '<div class="stat-grid">' +
+      '<div class="stat"><div class="v">' + fmt(tags) + '</div><div class="l">Tags</div></div>' +
+      '<div class="stat"><div class="v">' + fmt(player.Kills) + '</div><div class="l">Kills</div></div>' +
+      '<div class="stat"><div class="v">' + fmt(player.Deaths) + '</div><div class="l">Mortes</div></div>' +
+      '<div class="stat"><div class="v">' + kd + '</div><div class="l">K/D</div></div>' +
+      '<div class="stat"><div class="v">' + fmt(player.Headshots) + '</div><div class="l">Headshots</div></div>' +
+      '<div class="stat"><div class="v">' + fmt(player.LongestKill) + 'm</div><div class="l">Kill + longe</div></div>' +
+      '<div class="stat"><div class="v">' + fmt(player.RaidDestroys) + '</div><div class="l">Raids</div></div>' +
+      '<div class="stat"><div class="v">' + fmt(player.Barrels) + '</div><div class="l">Barris</div></div>' +
+      '<div class="stat"><div class="v">' + fmt(player.Farm) + '</div><div class="l">Farm total</div></div>' +
+      '</div>' +
+      '<div class="mini-ach">' + achHtml + '</div>' +
+      '<a class="steam-link muted" href="https://steamcommunity.com/profiles/' + player.SteamId + '" target="_blank">Ver perfil na Steam ↗</a>' +
+      '</div>';
+  };
 })();
 </script>
 
